@@ -71,12 +71,12 @@ range(edades)
 #guarda una tupla con los valores maximo y minimo
 #despues con la funcion *diff* se obtiene el rango
 
-#sturges
+
 no_intervalos <- nclass.Sturges(edades)
 
 #tamaÃ±o de los intervalos
 
-amplitud <- rango_edades/no_intervalos
+amplitud <- rango_edades/no_intervalos#sturges
 
 
 #tabla de frecuencia abs
@@ -121,10 +121,89 @@ pie(tabla_frecuencia[,2],
     labels = pie_labels,
     main = "GrÃ¡fica de sectores")
 
+# clase 161023
+
+# plot(tabla_frecuencia) genera una matriz de correlació de vars
+
+plot(tabla_frecuencia[,2], type="h",main="Gráfica de bastón",xlab="Intervalos",ylab="Frecuencia")
+
+## Histograma
+
+hist(x=edades,main = "Histograma de Edad", col ="#7DB954",border="#f00000",
+     breaks = no_intervalos,xlab = "Edad",ylab="Frecuencia")
+
+
+hist(x=edades,prob=TRUE,main="Histograma con curva normal",col ="#FFA700",border="#f00000",
+     ylab="Densidad")
+x <- seq (min(edades),max(edades),lenght=20)
+f <- dnorm(x,mean = mean(edades),sd=sd(edades))
+lines(x,f,col="blue",lwd=2)
+
+plot(freq_ac_edades,type="b",
+     xlab="intervalos",ylab = "Frecuencia acumulada",
+     main="Gráfico Ojiva",col="#FFA700",
+     pch=19,las=1,bty="l")
+
+
+## caso calificaciones ###############################################################################
+
+
+
+#tabla de frecuencia abs
+no_intervalos_cal <- nclass.Sturges(calificaciones)
 
 
 
 
 
 
+#tabla de frecuencia abs
 
+tabla_freq_cal  <- transform(table(cut(calificaciones,breaks=no_intervalos_cal)))
+
+#tabla de frecuencia acumualdas
+
+freq_ac_cal <- cumsum (tabla_freq_cal[,2])
+tabla_freq_cal_ac <- cbind(tabla_freq_cal,freq_ac_cal)
+
+## tabla de frecuencia relativa calificaciones
+
+n_cal <- length(calificaciones)
+freq_rela_cali <- tabla_freq_cal[,2]/n
+tabla_frecuencia_cali <- cbind(tabla_freq_cal_ac,freq_rela_cali)
+
+## graficas cal ##
+
+plot(tabla_frecuencia_cali[,2], type="h",main="Gráfica de bastón",xlab="Intervalos",ylab="Frecuencia")
+
+## Histograma
+
+hist(x=calificaciones,main = "Histograma de calificaciones", col ="#7DB954",border="#f00000",
+     breaks = no_intervalos,xlab = "calificaciones",ylab="Frecuencia")
+
+hist(x=calificaciones,prob=TRUE,main="Histograma con curva normal",col ="#FFA700",border="#f00000",
+     ylab="Densidad")
+x <- seq (min(calificaciones),max(calificaciones),lenght=20)
+f <- dnorm(x,mean = mean(calificaciones),sd=sd(calificaciones))
+lines(x,f,col="blue",lwd=2)
+
+
+plot(freq_ac_cal,type="b",
+     xlab="intervalos",ylab = "Frecuencia acumulada calificaciones",
+     main="Gráfico Ojiva",col="#FFA700",
+     pch=19,las=1,bty="l")
+
+
+
+pie(tabla_frecuencia_cali[,2],
+    labels= c ("(7.47,7.78]","(7.78,8.08]","(8.08,8.38]","(8.38,8.69]","(8.69,9]","(9,9.3]"),
+    col = 1:6,
+    main = "Grafica de sectores")
+
+
+pie_labels <- paste0(tabla_frecuencia_cali[,1],
+                     " = ",
+                     round(100*tabla_frecuencia_cali[,2]/n,2),"%")
+pie(tabla_frecuencia_cali[,2],
+    labels = pie_labels,
+    main = "Gráfica de sectores")
